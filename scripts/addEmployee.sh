@@ -1,0 +1,1 @@
+curl -X POST -H "Content-Type: application/json" "{\"employeeId\": \"123\", \"name\": \"Solid Snake\", \"title\": \"Programmer\", \"department\": \"Security\", \"employmentDate\": \"2025-06-28T19:03:50.020316700\", \"workHistories\": [{\"title\": \"Programmer\", \"employmentDate\": \"2025-06-28T19:03:50.020316700\"}]}" -v "http://localhost:8080/employee/create"
