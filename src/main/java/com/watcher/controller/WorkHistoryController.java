@@ -1,7 +1,9 @@
 package com.watcher.controller;
 
 import com.watcher.dto.WorkHistoryDTO;
+import com.watcher.dto.response.ApiResponse;
 import com.watcher.service.WorkHistoryService;
+import com.watcher.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,9 +23,9 @@ public class WorkHistoryController {
     }
 
     @PostMapping(path = "/update", consumes = "application/json")
-    public ResponseEntity<String> update(@RequestBody WorkHistoryDTO workHistoryDTO) {
+    public ResponseEntity<ApiResponse<Void>> update(@RequestBody WorkHistoryDTO workHistoryDTO) {
         workHistoryService.updateWork(workHistoryDTO);
-        return ResponseEntity.ok().build();
+        return ResponseUtil.createVoidSuccess();
     }
 
 }

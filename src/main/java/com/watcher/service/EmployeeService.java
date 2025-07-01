@@ -17,8 +17,6 @@ public interface EmployeeService {
 
     EmployeeDTO findByEmployeeId(String employeeId);
 
-    EmployeeDTO findByDepartment(String department);
-
     void delete(String id);
 
     void deleteByEmployeeId(String employeeId);
