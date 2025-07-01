@@ -1,7 +1,6 @@
 package com.watcher.service;
 
 import com.watcher.dto.EmployeeDTO;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Set;
 
@@ -11,7 +10,7 @@ public interface EmployeeService {
 
     void update(EmployeeDTO employeeDTO);
 
-    Set<EmployeeDTO> findAll(Pageable pageable);
+    Set<EmployeeDTO> findAll();
 
     EmployeeDTO findById(String id);
 
@@ -19,5 +18,4 @@ public interface EmployeeService {
 
     void delete(String id);
 
-    void deleteByEmployeeId(String employeeId);
 }

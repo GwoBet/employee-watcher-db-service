@@ -8,6 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface EmployeeRepository extends CrudRepository<Employee, String> {
 
     Employee findFirstByEmployeeId(String employeeId);
-
-    void deleteByEmployeeId(String employeeId);
 }

@@ -8,17 +8,52 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Reference;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @RedisHash
-public class Employee extends EmployeeBase {
+public class Employee{
+
+    /**
+     * Идентификатор создаваемый Redis
+     */
+    @Id
+    private String id;
+
+    /**
+     * Табельный номер сотрудника
+     */
+    @NotNull
+    @EqualsAndHashCode.Include
+    @Indexed
+    private String employeeId;
+
+    /**
+     * ФИО сотрудника
+     */
+    @NotNull
+    private String name;
+
+    /**
+     * Должность сотрудника
+     */
+    @NotNull
+    private String title;
+
+    /**
+     * Департамент в котором работает сотрудник
+     */
+    @NotNull
+    @Indexed
+    private String department;
 
     /**
      * Дата трудоустройства в компанию

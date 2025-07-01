@@ -2,22 +2,20 @@ package com.watcher.service.impl;
 
 import com.watcher.dto.EmployeeDTO;
 import com.watcher.dto.mapper.EmployeeMapper;
-import com.watcher.dto.mapper.EmployeeSearchMapper;
 import com.watcher.entity.Employee;
-import com.watcher.entity.EmployeeBase;
 import com.watcher.entity.WorkHistory;
 import com.watcher.exceptions.BaseDBSException;
 import com.watcher.repository.EmployeeRepository;
-import com.watcher.repository.EmployeeSearchRepository;
 import com.watcher.repository.WorkHistoryRepository;
 import com.watcher.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 // TODO разобраться с transaction и pipeline в redis и переписать создание и обновление объектов
 @Slf4j
@@ -26,23 +24,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final WorkHistoryRepository workHistoryRepository;
-    private final EmployeeSearchRepository employeeSearchRepository;
     private final EmployeeMapper mapper;
-    private final EmployeeSearchMapper searchMapper;
 
     @Autowired
     public EmployeeServiceImpl(
             EmployeeRepository employeeRepository,
             WorkHistoryRepository workHistoryRepository,
-            EmployeeSearchRepository employeeSearchRepository,
-            EmployeeSearchMapper searchMapper,
             EmployeeMapper mapper
     ) {
         this.employeeRepository = employeeRepository;
         this.workHistoryRepository = workHistoryRepository;
-        this.employeeSearchRepository = employeeSearchRepository;
         this.mapper = mapper;
-        this.searchMapper = searchMapper;
     }
 
     @Override
@@ -86,11 +78,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Set<EmployeeDTO> findAll(Pageable pageable) {
+    public Set<EmployeeDTO> findAll() {
         try {
-            Page<EmployeeBase> pagedResult = employeeSearchRepository.findAll(pageable);
-            Set<EmployeeBase> entities = pagedResult.hasContent() ? new HashSet<>(pagedResult.getContent()) : Collections.emptySet();
-            return searchMapper.map(entities);
+            Iterable<Employee> entities = employeeRepository.findAll();
+            return mapper.map(entities);
         } catch (Exception e) {
             log.error("Error finding all employees. Reason: {}", e.getMessage(), e);
             throw new BaseDBSException("Error finding all employees. Reason: " + e.getMessage(), e);
@@ -101,7 +92,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO findById(String id) {
         try {
             Optional<Employee> employee = employeeRepository.findById(id);
-            return employee.map(searchMapper::map).orElse(null);
+            return employee.map(mapper::map).orElse(null);
         } catch (Exception e) {
             log.error("Error finding employee by id. Reason: {}", e.getMessage(), e);
             throw new BaseDBSException("Error finding employee by id. Reason: " + e.getMessage(), e);
@@ -112,7 +103,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO findByEmployeeId(String employeeId) {
         try {
             Employee employee = employeeRepository.findFirstByEmployeeId(employeeId);
-            return null != employee ? searchMapper.map(employee) : null;
+            return null != employee ? mapper.map(employee) : null;
         } catch (Exception e) {
             log.error("Error finding employee by employeeId. Reason: {}", e.getMessage(), e);
             throw new BaseDBSException("Error finding employee by employeeId. Reason: " + e.getMessage(), e);
@@ -126,16 +117,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         } catch (Exception e) {
             log.error("Error deleting employee by id. Reason: {}", e.getMessage(), e);
             throw new BaseDBSException("Error deleting employee by id. Reason: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public void deleteByEmployeeId(String employeeId) {
-        try {
-            employeeRepository.deleteByEmployeeId(employeeId);
-        } catch (Exception e) {
-            log.error("Error deleting employee by employeeId. Reason: {}", e.getMessage(), e);
-            throw new BaseDBSException("Error deleting employee by employeeId. Reason: " + e.getMessage(), e);
         }
     }
 

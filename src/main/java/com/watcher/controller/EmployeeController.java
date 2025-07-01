@@ -5,8 +5,6 @@ import com.watcher.dto.response.ApiResponse;
 import com.watcher.service.EmployeeService;
 import com.watcher.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,12 +34,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<ApiResponse<Set<EmployeeDTO>>> findAll(
-            @RequestParam Integer page,
-            @RequestParam Integer size
-    ) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseUtil.createSuccess(employeeService.findAll(pageable));
+    public ResponseEntity<ApiResponse<Set<EmployeeDTO>>> findAll() {
+        return ResponseUtil.createSuccess(employeeService.findAll());
     }
 
     @GetMapping("/findById")
@@ -57,12 +51,6 @@ public class EmployeeController {
     @PostMapping("/delete")
     public ResponseEntity<ApiResponse<Void>> delete(@RequestParam String id) {
         employeeService.delete(id);
-        return ResponseUtil.createVoidSuccess();
-    }
-
-    @PostMapping("/deleteByEmployeeId")
-    public ResponseEntity<ApiResponse<Void>> deleteByEmployeeId(@RequestParam String employeeId) {
-        employeeService.deleteByEmployeeId(employeeId);
         return ResponseUtil.createVoidSuccess();
     }
 }
