@@ -9,9 +9,13 @@ public interface EmployeeService {
 
     void create(EmployeeDTO employeeDTO);
 
+    void update(EmployeeDTO employeeDTO);
+
     Set<EmployeeDTO> findAll(Pageable pageable);
 
     EmployeeDTO findById(String id);
+
+    EmployeeDTO findByEmployeeId(String employeeId);
 
     EmployeeDTO findByDepartment(String department);
 

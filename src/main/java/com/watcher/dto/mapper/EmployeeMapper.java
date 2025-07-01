@@ -5,6 +5,6 @@ import com.watcher.dto.mapper.base.DefaultMapper;
 import com.watcher.entity.Employee;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = WorkHistoryMapper.class)
 public interface EmployeeMapper extends DefaultMapper<EmployeeDTO, Employee> {
 }

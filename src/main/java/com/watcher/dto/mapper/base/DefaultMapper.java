@@ -8,5 +8,5 @@ public interface DefaultMapper<D, E> {
 
     D map(E entity);
 
-    Set<D> map(Set<E> set);
+    Set<D> map(Iterable<E> set);
 }

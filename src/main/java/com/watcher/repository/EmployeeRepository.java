@@ -1,11 +1,13 @@
 package com.watcher.repository;
 
 import com.watcher.entity.Employee;
-import com.watcher.repository.base.PagingAndSortingCrudRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EmployeeRepository extends PagingAndSortingCrudRepository<Employee, String> {
+public interface EmployeeRepository extends CrudRepository<Employee, String> {
+
+    Employee findFirstById(String id);
 
     Employee findFirstByEmployeeId(String employeeId);
 

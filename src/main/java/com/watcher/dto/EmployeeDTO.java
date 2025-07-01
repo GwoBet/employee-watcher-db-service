@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.watcher.entity.WorkHistory;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,5 +39,5 @@ public class EmployeeDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime dismissalDate;
 
-    private Set<WorkHistory> workHistories = new HashSet<>();
+    private Set<WorkHistoryDTO> workHistories = new HashSet<>();
 }

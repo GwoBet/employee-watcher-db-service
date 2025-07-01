@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-//TODO сделать поиск по employeeId и department
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -28,10 +27,9 @@ public class EmployeeController {
         return ResponseEntity.ok().build();
     }
 
-    // TODO: сделать update с проверкой на изменения с предыдущей сущностью
     @PostMapping(path = "/update", consumes = "application/json")
     public ResponseEntity<String> update(@RequestBody EmployeeDTO employeeDTO) {
-        employeeService.create(employeeDTO);
+        employeeService.update(employeeDTO);
         return ResponseEntity.ok().build();
     }
 
@@ -44,9 +42,30 @@ public class EmployeeController {
         return employeeService.findAll(pageable);
     }
 
+    @GetMapping("/findById")
+    public ResponseEntity<EmployeeDTO> findById(@RequestParam String id) {
+        return ResponseEntity.ok(employeeService.findById(id));
+    }
+
+    @GetMapping("/findByEmployeeId")
+    public ResponseEntity<EmployeeDTO> findByEmployeeId(@RequestParam String employeeId) {
+        return ResponseEntity.ok(employeeService.findByEmployeeId(employeeId));
+    }
+
+    @GetMapping("/findByDepartment")
+    public ResponseEntity<EmployeeDTO> findByDepartment(@RequestParam String department) {
+        return ResponseEntity.ok(employeeService.findByDepartment(department));
+    }
+
     @PostMapping("/delete")
     public ResponseEntity<String> delete(@RequestParam String id) {
         employeeService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/deleteByEmployeeId")
+    public ResponseEntity<String> deleteByEmployeeId(@RequestParam String employeeId) {
+        employeeService.delete(employeeId);
         return ResponseEntity.ok().build();
     }
 }
