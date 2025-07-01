@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/work-history")
 public class WorkHistoryController {
 
     private final WorkHistoryService workHistoryService;
