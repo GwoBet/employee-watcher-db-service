@@ -9,4 +9,6 @@ public interface DefaultMapper<D, E> {
     D map(E entity);
 
     Set<D> map(Iterable<E> set);
+
+    Set<E> from(Iterable<D> set);
 }

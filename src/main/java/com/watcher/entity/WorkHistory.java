@@ -30,7 +30,6 @@ public class WorkHistory {
     /**
      * Должность
      */
-    @EqualsAndHashCode.Exclude
     private String title;
 
     /**

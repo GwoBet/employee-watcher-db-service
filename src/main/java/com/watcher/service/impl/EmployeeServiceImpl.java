@@ -5,6 +5,8 @@ import com.watcher.dto.mapper.EmployeeMapper;
 import com.watcher.entity.Employee;
 import com.watcher.entity.WorkHistory;
 import com.watcher.exceptions.BaseDBSException;
+import com.watcher.exceptions.EntityAlreadyExistException;
+import com.watcher.exceptions.EntityNotExistException;
 import com.watcher.repository.EmployeeRepository;
 import com.watcher.repository.WorkHistoryRepository;
 import com.watcher.service.EmployeeService;
@@ -40,11 +42,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void create(EmployeeDTO employeeDTO) {
         try {
+            Employee employee = employeeRepository.findFirstByEmployeeId(employeeDTO.getEmployeeId());
+            if (null != employee) {
+                throw new EntityAlreadyExistException("Employee [" + employeeDTO.getEmployeeId() + "] already exist!");
+            }
             Employee newEmployee = mapper.from(employeeDTO);
             if (!newEmployee.getWorkHistories().isEmpty()) {
                 workHistoryRepository.saveAll(newEmployee.getWorkHistories());
             }
             employeeRepository.save(newEmployee);
+        }catch (EntityAlreadyExistException ea) {
+            log.error("Employee creation failed. Reason: {}", ea.getMessage(), ea);
+            throw new BaseDBSException(
+                    "Employee creation failed. Reason: " + ea.getMessage(),
+                    EntityAlreadyExistException.class.getName(),
+                    ea
+            );
         } catch (Exception e) {
             log.error("Employee creation failed. Reason: {}", e.getMessage(), e);
             throw new BaseDBSException("Employee creation failed. Reason: " + e.getMessage(), e);
@@ -113,6 +126,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void delete(String id) {
         try {
+            Employee employee = employeeRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotExistException("Employee [" + id + "] does not exist"));
+            workHistoryRepository.deleteAll(employee.getWorkHistories());
             employeeRepository.deleteById(id);
         } catch (Exception e) {
             log.error("Error deleting employee by id. Reason: {}", e.getMessage(), e);
